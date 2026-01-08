@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKO26 Seating Assignments - Appian</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #F4F4F4;
+            color: #212B35;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #00A6E0 0%, #0077B5 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .header .subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            opacity: 0.95;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .info-section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #00A6E0;
+        }
+        
+        .info-section h2 {
+            color: #212B35;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #00A6E0;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #5A6C7D;
+        }
+        
+        .search-box {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #E5E7EB;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: 'Open Sans', sans-serif;
+            transition: border-color 0.2s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #00A6E0;
+        }
+        
+        .attendee-table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .table-header {
+            background: #212B35;
+            color: white;
+            display: grid;
+            grid-template-columns: 3fr 1fr 2fr 2.5fr;
+            gap: 15px;
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .attendee-row {
+            display: grid;
+            grid-template-columns: 3fr 1fr 2fr 2.5fr;
+            gap: 15px;
+            padding: 15px 20px;
+            border-bottom: 1px solid #F0F0F0;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        
+        .attendee-row:hover {
+            background-color: #F8F9FA;
+        }
+        
+        .attendee-row:last-child {
+            border-bottom: none;
+        }
+        
+        .name {
+            font-weight: 600;
+            color: #212B35;
+        }
+        
+        .table-number {
+            background: #00A6E0;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 700;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .theater {
+            color: #5A6C7D;
+            font-size: 14px;
+        }
+        
+        .industry {
+            color: #7A8A9A;
+            font-size: 14px;
+        }
+        
+        .footer {
+            background: #212B35;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+        
+        .footer p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .search-box {
+                display: none;
+            }
+            
+            .header {
+                background: #00A6E0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .table-header,
+            .attendee-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .table-header {
+                display: none;
+            }
+            
+            .attendee-row > div::before {
+                font-weight: 600;
+                margin-right: 8px;
+            }
+            
+            .name::before {
+                content: 'Name: ';
+            }
+            
+            .table-number::before {
+                content: 'Table: ';
+            }
+            
+            .theater::before {
+                content: 'Theater: ';
+            }
+            
+            .industry::before {
+                content: 'Industry: ';
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SKO26 Seating Assignments</h1>
+        <div class="subtitle">Sales Kickoff 2026 - Alphabetical Directory</div>
+    </div>
+    
+    <div class="container">
+        <div class="info-section">
+            <h2>Event Overview</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">127</div>
+                    <div class="stat-label">Total Attendees</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">18</div>
+                    <div class="stat-label">Tables (8 seats each)</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Theater Regions</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Industry Verticals</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by name, theater, or industry...">
+        </div>
+        
+        <div class="attendee-table">
+            <div class="table-header">
+                <div>Name</div>
+                <div>Table</div>
+                <div>Theater</div>
+                <div>Industry</div>
+            </div>
+            <div id="attendeeList">
+                <!-- Attendees will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2026 Appian Corporation. All rights reserved.</p>
+    </div>
+    
+    <script>
+        const attendees = [
+            {name: "Aldana, Gregg", table: 6, theater: "Global", industry: "No Industry Alignment"},
+            {name: "Allen, Ben", table: 8, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Alvarez, Ignacio", table: 6, theater: "EMEA", industry: "Financial Services"},
+            {name: "Andersen, Becca", table: 8, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Anderson, Max", table: 6, theater: "North America", industry: "Financial Services"},
+            {name: "Ansink, Mark", table: 2, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "Armstrong, John", table: 3, theater: "North America", industry: "Broad Markets"},
+            {name: "Ashworth, Alyssa", table: 7, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Bailey, Brandon", table: 6, theater: "North America", industry: "Insurance"},
+            {name: "Baxter, Ysanne", table: 1, theater: "Global", industry: "No Industry Alignment"},
+            {name: "Becker, Summer", table: 17, theater: "North America", industry: "No Industry Alignment"},
+            {name: "Bethune, Nick", table: 11, theater: "APJ", industry: "Insurance"},
+            {name: "Biondo, Reid", table: 9, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Blazquez, Sergio", table: 17, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "Boerescu, Alex", table: 8, theater: "EMEA", industry: "Financial Services"},
+            {name: "Bower, Eric", table: 10, theater: "North America", industry: "Global Public Sector"},
+            {name: "Brorsen, Henry", table: 1, theater: "North America", industry: "Broad Markets"},
+            {name: "Buxbaum, Colin", table: 7, theater: "EMEA", industry: "Financial Services"},
+            {name: "Capraro, Alicia", table: 4, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Censullo, Joe", table: 14, theater: "North America", industry: "No Industry Alignment"},
+            {name: "Chauhan, Deepak", table: 5, theater: "APJ", industry: "Financial Services"},
+            {name: "Clarke, Rebecca", table: 3, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Costa, Noah", table: 11, theater: "North America", industry: "Financial Services"},
+            {name: "Crocè, Luigi", table: 14, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "Croxon, Ray", table: 17, theater: "APJ", industry: "Financial Services"},
+            {name: "de Jong, Jordan", table: 10, theater: "APJ", industry: "No Industry Alignment"},
+            {name: "DeVito, Cooper", table: 9, theater: "North America", industry: "Life Sciences"},
+            {name: "Edwards, Geoff", table: 3, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Elger, Markus", table: 14, theater: "EMEA", industry: "Insurance"},
+            {name: "Esteves, Isabel", table: 2, theater: "Global", industry: "Life Sciences"},
+            {name: "Farrell, Chris", table: 2, theater: "North America", industry: "Financial Services"},
+            {name: "Franci, Youssef", table: 18, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "Garvey, Joseph", table: 3, theater: "North America", industry: "Financial Services"},
+            {name: "Geer, Chris", table: 13, theater: "North America", industry: "All Industies"},
+            {name: "Glover, Matt", table: 14, theater: "North America", industry: "Broad Markets"},
+            {name: "Gomez, Daniel", table: 9, theater: "Global", industry: "No Industry Alignment"},
+            {name: "Gomez, Javier", table: 7, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "Graham, Julia", table: 18, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Handfield, Johanne", table: 17, theater: "North America", industry: "Broad Markets"},
+            {name: "Haselby, Jack", table: 13, theater: "North America", industry: "Insurance"},
+            {name: "Heilemann, Jade", table: 11, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Heupel, Mark", table: 1, theater: "North America", industry: "Insurance"},
+            {name: "Hill, Stewart", table: 9, theater: "North America", industry: "Financial Services"},
+            {name: "Hillier, David", table: 3, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "Hincewicz, Eddie", table: 5, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Hinds, Kris", table: 6, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Ho, Wei Keong", table: 1, theater: "APJ", industry: "No Industry Alignment"},
+            {name: "Hock, Andreas", table: 4, theater: "EMEA", industry: "Life Sciences"},
+            {name: "Jacques, Adam", table: 7, theater: "APJ", industry: "Global Public Sector"},
+            {name: "Jankins, Ross", table: 4, theater: "North America", industry: "No Industry Alignment"},
+            {name: "Jarvis, Kiely", table: 5, theater: "EMEA", industry: "Broad Markets"},
+            {name: "Joshi, Sanat", table: 15, theater: "North America", industry: "No Industry Alignment"},
+            {name: "Kane, Alexis", table: 12, theater: "North America", industry: "Financial Services"},
+            {name: "Kiefer, Stephanie", table: 17, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Killion, Christopher", table: 14, theater: "North America", industry: "Global Public Sector"},
+            {name: "Kocsis, Geri", table: 17, theater: "EMEA", industry: "Global Public Sector"},
+            {name: "Kollcaku, Skender", table: 13, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "Kreek, Liz", table: 2, theater: "North America", industry: "Financial Services"},
+            {name: "Kulkarni, Kiran", table: 4, theater: "APJ", industry: "No Industry Alignment"},
+            {name: "Law, Anthony", table: 12, theater: "North America", industry: "No Industry Alignment"},
+            {name: "Lee, Roger", table: 9, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "Leonard, Christian", table: 16, theater: "North America", industry: "No Industry Alignment"},
+            {name: "Levy, Mervyn", table: 5, theater: "Global", industry: "No Industry Alignment"},
+            {name: "Lewis, David", table: 6, theater: "North America", industry: "Broad Markets"},
+            {name: "Licata, Michael", table: 11, theater: "North America", industry: "Broad Markets"},
+            {name: "Littig, Steve", table: 5, theater: "North America", industry: "Insurance"},
+            {name: "Lorenz, Thomas", table: 8, theater: "EMEA", industry: "Broad Markets"},
+            {name: "Louie, Tim", table: 13, theater: "APJ", industry: "Global Public Sector"},
+            {name: "Lowe, Richard", table: 2, theater: "APJ", industry: "Broad Markets"},
+            {name: "Luz, Guilherme", table: 12, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "Mambrilla Velazquez, Marta", table: 12, theater: "EMEA", industry: "Global Public Sector"},
+            {name: "Markandan, Sathish", table: 1, theater: "North America", industry: "Life Sciences"},
+            {name: "Martignon, Israel", table: 11, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "Mason, Anna", table: 10, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "Maynard, Andy", table: 8, theater: "North America", industry: "Financial Services"},
+            {name: "Mazzuca, Emanuele", table: 11, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "McCabe, Chris", table: 3, theater: "APJ", industry: "No Industry Alignment"},
+            {name: "McDonald, Mike", table: 4, theater: "North America", industry: "Broad Markets"},
+            {name: "Medina, Pablo", table: 10, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Merritt, Michael", table: 5, theater: "Public Sector", industry: "Global Public Sector"},
+            {name: "Mooney, Chris", table: 18, theater: "APJ", industry: "Financial Services"},
+            {name: "Moore, Derek", table: 9, theater: "North America", industry: "Broad Markets"},
+            {name: "Morari, Michaela", table: 2, theater: "North America", industry: "Insurance"},
+            {name: "Munroe, Rob", table: 7, theater: "Global", industry: "No Industry Alignment"},
+            {name: "Naughton, Grace", table: 6, theater: "APJ", industry: "Global Public Sector"},
+            {name: "Ng, Davis", table: 6, theater: "CNA", industry: "No Industry Alignment"},
+            {name: "Noonan, Shaun", table: 12, theater: "North America", industry: "Broad Markets"},
+            {name: "Nussbaum, David", table: 12, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "O'Connell, Tim", table: 14, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Parashar, Anishka", table: 10, theater: "EMEA", industry: "Broad Markets"},
+            {name: "Pinon, Pascal", table: 2, theater: "EMEA", industry: "No Industry Alignment"},
+            {name: "Pollack, Maya", table: 8, theater: "North America", industry: "No Industry Alignment"},
+            {name: "Polutan, Elvin", table: 18, theater: "EMEA", industry: "Insurance"},
+            {name: "Preputnik, Daniel", table: 11, theater: "North America", industry: "Life Sciences"},
+            {name: "Przybylski, Megan", table: 13, theater: "North America", industry: "Broad Markets"},
+            {name: "Psalmond, Rose", table: 8, theater: "North America", industry: "No Industry Alignment"},
+            {name: "Purtell, Steve", table: 15, theater: "North America", industry: "Global Public Sector"},
+            {name: "Rader, Val", table: 10, theater: "North America", industry: "Financial Services"},
+            {name: "Radossich, John", table: 4, theater: "North America", industry: "Financial Services"},
+            {name: "Reinhardt, Dan", table: 15, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Ribot, Lucia", table: 1, theater: "EMEA", industry: "Financial Services"},
+            {name: "Rickards, Jack", table: 1, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Riquelme Osado, Ramon", table: 3, theater: "EMEA", industry: "Insurance"},
+            {name: "Rissmeyer, Ashley", table: 7, theater: "North America", industry: "Financial Services"},
+            {name: "Roberts, Daniel", table: 15, theater: "EMEA", industry: "Financial Services"},
+            {name: "Sartorius, Kelsey", table: 16, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Scott, Carley", table: 13, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Serrano Dieguez, Roberto", table: 13, theater: "EMEA", industry: "Financial Services"},
+            {name: "Shedlick, Carly", table: 3, theater: "North America", industry: "Life Sciences"},
+            {name: "Shore, Thomas", table: 18, theater: "North America", industry: "No Industry Alignment"},
+            {name: "Soussi, Amine", table: 4, theater: "EMEA", industry: "Financial Services"},
+            {name: "Sterchi, James", table: 18, theater: "North America", industry: "Broad Markets"},
+            {name: "Tadros, Fady", table: 7, theater: "North America", industry: "Insurance"},
+            {name: "Tang, Elliott", table: 5, theater: "North America", industry: "No Industry Alignment"},
+            {name: "Thiagarajan, VIjay Sai", table: 15, theater: "EMEA", industry: "Broad Markets"},
+            {name: "Thorn, Scott", table: 5, theater: "North America", industry: "Financial Services"},
+            {name: "Todd, Michael", table: 9, theater: "APJ", industry: "Global Public Sector"},
+            {name: "Van Kampen, Eugène", table: 1, theater: "EMEA", industry: "Financial Services"},
+            {name: "Vignerot, Rob", table: 16, theater: "EMEA", industry: "Broad Markets"},
+            {name: "Virtue, Alex", table: 16, theater: "EMEA", industry: "Financial Services"},
+            {name: "Vlatko, Nicholas", table: 9, theater: "EMEA", industry: "Broad Markets"},
+            {name: "Walia, Angad", table: 7, theater: "North America", industry: "Broad Markets"},
+            {name: "Weaver, Grace", table: 16, theater: "North America", industry: "No Industry Alignment"},
+            {name: "Wofford, Daniel", table: 4, theater: "US Public Sector", industry: "Global Public Sector"},
+            {name: "Woll, Michael", table: 8, theater: "EMEA", industry: "Insurance"},
+            {name: "Woo, Wen Siang", table: 14, theater: "APJ", industry: "Financial Services"},
+            {name: "Zafran, Aaron", table: 2, theater: "US Public Sector", industry: "Global Public Sector"}
+        ];
+        
+        function renderAttendees(filteredAttendees) {
+            const listElement = document.getElementById('attendeeList');
+            listElement.innerHTML = filteredAttendees.map(attendee => `
+                <div class="attendee-row">
+                    <div class="name">${attendee.name}</div>
+                    <div><span class="table-number">${attendee.table}</span></div>
+                    <div class="theater">${attendee.theater}</div>
+                    <div class="industry">${attendee.industry}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Initial render
+        renderAttendees(attendees);
+        
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = attendees.filter(attendee => 
+                attendee.name.toLowerCase().includes(searchTerm) ||
+                attendee.theater.toLowerCase().includes(searchTerm) ||
+                attendee.industry.toLowerCase().includes(searchTerm) ||
+                attendee.table.toString().includes(searchTerm)
+            );
+            renderAttendees(filtered);
+        });
+    </script>
+</body>
+</html>
